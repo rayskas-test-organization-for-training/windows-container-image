@@ -1,29 +1,20 @@
-#
 name: Create and publish a Docker image
-
-# Configures this workflow to run every time a change is pushed to the branch called `release`.
 on: workflow_dispatch
-
-# Defines two custom environment variables for the workflow. These are used for the Container registry domain, and a name for the Docker image that this workflow builds.
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
 
-# There is a single job in this workflow. It's configured to run on the latest available version of Ubuntu.
 jobs:
   build-and-push-image:
     runs-on: windows-2019
-    # Sets the permissions granted to the `GITHUB_TOKEN` for the actions in this job.
     permissions:
       contents: read
       packages: write
       attestations: write
       id-token: write
-      # 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        
       - name: Log in to the Container registry
         uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
         with:
@@ -32,18 +23,8 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
     
       - name: Build and push Docker image
-        id: push
-        uses: docker/build-push-action@v2
-        with:
-          context: .
-          push: true
-          tags: windows:latest
-      
-      # This step generates an artifact attestation for the image, which is an unforgeable statement about where and how it was built. It increases supply chain security for people who consume the image. For more information, see "[AUTOTITLE](/actions/security-guides/using-artifact-attestations-to-establish-provenance-for-builds)." 
-      - name: Generate artifact attestation
-        uses: actions/attest-build-provenance@v1
-        with:
-          subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}
-          subject-digest: ${{ steps.push.outputs.digest }}
-          push-to-registry: true
+        working-directory: .
+        run: |
+          docker build . -t windows-2019-runner:latest
+          docker logout
       
