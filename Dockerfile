@@ -7,8 +7,8 @@ RUN Invoke-WebRequest -Uri 'https://aka.ms/install-powershell.ps1' -OutFile inst
 
 # Install GitHub Runner
 RUN mkdir \actions-runner ; cd \actions-runner
-RUN Invoke-WebRequest -Uri https://github.com/actions/runner/releases/download/v2.319.1/actions-runner-win-x64-2.319.1.zip -OutFile actions-runner-win-x64-2.319.1.zip -OutFile runner.zip
-RUN Expand-Archive -Path $pwd/runner.zip -DestinationPath C:/actions-runner
+RUN Invoke-WebRequest -Uri https://github.com/actions/runner/releases/download/v2.319.1/actions-runner-win-x64-2.319.1.zip -OutFile actions-runner-win-x64-2.319.1.zip
+RUN Expand-Archive -Path $pwd/actions-runner-win-x64-2.319.1.zip -DestinationPath C:/actions-runner
 
 ADD entrypoint.ps1 entrypoint.ps1
 
