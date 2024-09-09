@@ -9,8 +9,8 @@ RUN Expand-Archive -Path $pwd/actions-runner-win-x64-2.319.1.zip -DestinationPat
 
 
 # Install latest PowerShell
-RUN Invoke-WebRequest -Uri 'https://aka.ms/install-powershell.ps1' -OutFile install-powershell.ps1; ./install-powershell.ps1 -AddToPath
+RUN powershell Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
 
-ADD entrypoint.ps1 entrypoint.ps1
+RUN powershell choco install git.install --params "'/GitAndUnixToolsOnPath'" -y
 
-CMD [ "pwsh", ".\\entrypoint.ps1"]
+RUN powershell choco feature enable -n allowGlobalConfirmation
