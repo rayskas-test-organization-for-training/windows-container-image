@@ -9,8 +9,9 @@ RUN Expand-Archive -Path $pwd/actions-runner-win-x64-2.319.1.zip -DestinationPat
 
 
 # Install latest PowerShell
-RUN powershell Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+RUN winget install --id Microsoft.PowerShell --source winget
+#RUN powershell Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
 
-RUN powershell choco install git.install --params "'/GitAndUnixToolsOnPath'" -y
+#RUN powershell choco install git.install --params "'/GitAndUnixToolsOnPath'" -y
 
-RUN powershell choco feature enable -n allowGlobalConfirmation
+#RUN powershell choco feature enable -n allowGlobalConfirmation
