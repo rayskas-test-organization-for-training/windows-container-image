@@ -25,6 +25,7 @@ jobs:
       - name: Build and push Docker image
         working-directory: .
         run: |
-          docker build . -t windows-2019-runner:latest
+          docker build . -t ${{ github.repository }}:latest
+          docker image push ${{ github.repository }}:latest
           docker logout
       
