@@ -1,0 +1,32 @@
+name: Test to create and publish a Docker image
+on: workflow_dispatch
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  build-and-push-image:
+    runs-on: windows-2019
+    permissions:
+      contents: read
+      packages: write
+      attestations: write
+      id-token: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Log in to the Container registry
+        uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+    
+      - name: Build and push Docker image
+        working-directory: .
+        run: |
+          docker build . -t ${{ github.repository }}/2.319.1 -f Dockerfile.test
+          docker image ls
+          docker push ${{ github.repository }}/2.319.1
+          docker logout
+      
