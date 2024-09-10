@@ -7,11 +7,6 @@ env:
 jobs:
   build-and-push-image:
     runs-on: windows-2019
-    permissions:
-      contents: read
-      packages: write
-      attestations: write
-      id-token: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
