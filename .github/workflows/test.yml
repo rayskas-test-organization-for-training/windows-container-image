@@ -17,6 +17,6 @@ jobs:
         run: |
           docker build . -t ${{ github.repository }}/2.319.1 -f Dockerfile.test
           docker image ls
-          docker push ${{ github.repository }}/2.319.1
+          docker push ghcr.io/${{ github.repository }}/2.319.1
           docker logout
       
