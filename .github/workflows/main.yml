@@ -15,18 +15,14 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-      - name: Log in to the Container registry
-        uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-    
+      - name: Docker login
+        run: docker login ghcr.io -u raimond-gaev -p ${{ secrets.GITHUB_TOKEN }}
       - name: Build and push Docker image
         working-directory: .
         run: |
-          docker build . -t ghcr.io/${{ github.repository }}/2.319.1
+          docker build . -t ${{ github.repository }}/2.319.1 -f Dockerfile
+          docker tag ${{ github.repository }}/2.319.1 ghcr.io/${{ github.repository }}/2.319.1:v1.0
           docker image ls
-          docker push ${{ github.repository }}/2.319.1
+          docker push ghcr.io/${{ github.repository }}/2.319.1:v1.0
           docker logout
       
